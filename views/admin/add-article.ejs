@@ -1,0 +1,25 @@
+<h1 class="text-3xl font-bold text-gray-800 mb-6">Thêm Bài viết mới</h1>
+
+<div class="bg-white p-8 rounded-lg shadow-md">
+    <form action="/admin/articles/add" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <div>
+            <label for="title" class="block text-sm font-medium text-gray-700">Tiêu đề</label>
+            <input type="text" name="title" id="title" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        <div>
+            <label for="content" class="block text-sm font-medium text-gray-700">Nội dung</label>
+            <textarea name="content" id="content" rows="10" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+        </div>
+
+        <div>
+            <label for="image" class="block text-sm font-medium text-gray-700">Ảnh đại diện</label>
+            <input type="file" name="image" id="image" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+        </div>
+
+        <div class="flex justify-end space-x-4">
+            <a href="/admin/articles" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Hủy</a>
+            <button type="submit" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Thêm bài viết</button>
+        </div>
+    </form>
+</div>

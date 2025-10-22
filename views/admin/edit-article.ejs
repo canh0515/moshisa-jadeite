@@ -1,0 +1,29 @@
+<%- include('../layouts/admin-header') %>
+
+<h1>Sửa Bài viết</h1>
+<hr>
+<form action="/admin/articles/edit/<%= article.id %>" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="title" class="form-label">Tiêu đề bài viết</label>
+        <input type="text" class="form-control" id="title" name="title" value="<%= article.title %>" required>
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Ảnh đại diện</label>
+        <% if (article.imageUrl) { %>
+            <p>Ảnh hiện tại:</p>
+            <img src="<%= article.imageUrl %>" alt="<%= article.title %>" style="max-width: 200px; height: auto; border-radius: 5px; margin-bottom: 10px;">
+        <% } %>
+        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+        <div class="form-text">Để trống nếu không muốn thay đổi ảnh.</div>
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">Nội dung bài viết</label>
+        <textarea class="form-control" id="content" name="content" rows="15" required><%= article.content %></textarea>
+        <div class="form-text">Bạn có thể sử dụng HTML cơ bản để định dạng bài viết.</div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    <a href="/admin/articles" class="btn btn-secondary">Hủy</a>
+</form>
+
+<%- include('../layouts/admin-footer') %>

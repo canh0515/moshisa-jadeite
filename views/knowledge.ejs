@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+
+<div class="container my-5">
+    <h1 class="pb-2 border-bottom">Kiến thức về Trang sức</h1>
+
+    <div class="list-group mt-4">
+        <% if (articles.length > 0) { %>
+            <% articles.forEach(article => { %>
+                <a href="/kien-thuc/<%= article.slug %>" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1"><%= article.title %></h5>
+                        <small>Danh mục: <%= article.category %></small>
+                    </div>
+                </a>
+            <% }) %>
+        <% } else { %>
+            <p>Chưa có bài viết nào.</p>
+        <% } %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

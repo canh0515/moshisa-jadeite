@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= pageTitle %> - Moshisa Jadeite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- SortableJS for drag-and-drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <style>
+        /* CSS cho trạng thái thu gọn của sidebar */
+        #sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+        #sidebar.collapsed nav a {
+            justify-content: center;
+        }
+        #sidebar.collapsed .sidebar-title {
+            justify-content: center;
+        }
+        #sidebar.collapsed .sidebar-title h1 {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="admin-wrapper" class="flex h-screen">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-gray-800 text-white p-4 flex flex-col transition-all duration-300 ease-in-out">
+            <div class="sidebar-title flex justify-between items-center mb-8">
+                <h1 class="text-2xl font-bold sidebar-text">Admin Panel</h1>
+                <button id="sidebar-toggle" class="p-2 rounded-md hover:bg-gray-700 focus:outline-none">
+                    <i class="bi bi-list text-2xl"></i>
+                </button>
+            </div>
+            <nav class="flex-grow space-y-2">
+                <a href="/admin" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-box-seam-fill me-3"></i><span class="sidebar-text">Sản phẩm</span></a>
+                <a href="/admin/categories" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-tags-fill me-3"></i><span class="sidebar-text">Danh mục</span></a>
+                <a href="/admin/articles" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-newspaper me-3"></i><span class="sidebar-text">Bài viết</span></a>
+                <a href="/admin/knowledge" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-lightbulb-fill me-3"></i><span class="sidebar-text">Kiến thức</span></a>
+                <a href="/admin/testimonials" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-chat-quote-fill me-3"></i><span class="sidebar-text">Đánh giá</span></a>
+                <a href="/admin/videos" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-film me-3"></i><span class="sidebar-text">Thư viện Video</span></a>
+                <a href="/admin/settings" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-gear-fill me-3"></i><span class="sidebar-text">Cài đặt chung</span></a>
+                <hr class="my-4 border-gray-600">
+                <h2 class="px-4 text-sm font-semibold text-gray-400 uppercase sidebar-text">Nội dung trang</h2>
+                <a href="/admin/page/about-us" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-info-circle-fill me-3"></i><span class="sidebar-text">Về chúng tôi</span></a>
+                <a href="/admin/page/contact" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-person-lines-fill me-3"></i><span class="sidebar-text">Liên hệ</span></a>
+                <a href="/admin/page/privacy-policy" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-shield-lock-fill me-3"></i><span class="sidebar-text">Chính sách bảo mật</span></a>
+                <a href="/admin/page/return-policy" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-arrow-return-left me-3"></i><span class="sidebar-text">Chính sách đổi trả</span></a>
+                <a href="/admin/page/shipping-policy" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-truck me-3"></i><span class="sidebar-text">Chính sách giao hàng</span></a>
+                <a href="/admin/page/shopping-guide" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700"><i class="bi bi-cart-check-fill me-3"></i><span class="sidebar-text">Hướng dẫn mua hàng</span></a>
+            </nav>
+            <div class="mt-auto">
+                <a href="/admin/logout" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-red-500"><i class="bi bi-box-arrow-right me-3"></i><span class="sidebar-text">Đăng xuất</span></a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-10 overflow-y-auto transition-all duration-300 ease-in-out">
+            <!-- Flash Messages -->
+            <% if (locals.successMessage && successMessage.length > 0) { %>
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+                    <p class="font-bold">Thành công</p>
+                    <p><%= successMessage[0] %></p>
+                </div>
+            <% } %>
+            <% if (locals.errorMessage && errorMessage.length > 0) { %>
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+                    <p class="font-bold">Lỗi</p>
+                    <p><%= errorMessage[0] %></p>
+                </div>
+            <% } %>
+
+            <%- body -%>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleButton = document.getElementById('sidebar-toggle');
+
+            toggleButton.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                sidebar.classList.toggle('w-64');
+                sidebar.classList.toggle('w-20');
+            });
+        });
+    </script>
+</body>
+</html>
+
+

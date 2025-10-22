@@ -1,0 +1,115 @@
+<!-- Banner chính -->
+<div class="p-4 p-md-5 mb-4 rounded text-white" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('<%= settings.banner_image_url || '' %>') no-repeat center center; background-size: cover; background-color: #343a40;">
+    <div class="col-lg-6 px-0">
+      <h1 class="display-4 fst-italic"><%- settings.banner_title %></h1>
+      <p class="lead my-3"><%- settings.banner_subtitle %></p>
+      <p class="lead mb-0"><a href="<%= settings.banner_article_link || settings.banner_button_link %>" class="text-white fw-bold"><%- settings.banner_button_text %></a></p>
+    </div>
+</div>
+
+<!-- Carousel -->
+<% if (slides && slides.length > 0) { %>
+<div id="homeCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <% slides.forEach((slide, index) => { %>
+            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="<%= index %>" class="<%= index === 0 ? 'active' : '' %>" aria-current="<%= index === 0 ? 'true' : 'false' %>" aria-label="Slide <%= index + 1 %>"></button>
+        <% }) %>
+    </div>
+    <div class="carousel-inner rounded">
+        <% slides.forEach((slide, index) => { %>
+            <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                <a href="<%= slide.link || '#' %>">
+                    <img src="<%= slide.imageUrl %>" class="d-block w-100" alt="<%= slide.title %>" style="max-height: 400px; object-fit: cover;">
+                    <% if (slide.title) { %>
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5><%= slide.title %></h5>
+                            <p><%= slide.description %></p>
+                        </div>
+                    <% } %>
+                </a>
+            </div>
+        <% }) %>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<% } %>
+
+<!-- Featured Categories with Products -->
+<% if (locals.featuredCategories && featuredCategories.length > 0) { %>
+  <% featuredCategories.forEach(category => { %>
+    <% if (category.Products && category.Products.length > 0) { %>
+      <div class="category-products-section my-5">
+        <div class="d-flex justify-content-between align-items-center pb-2 border-bottom">
+          <h2 class="mb-0"><%= category.name %></h2>
+          <a href="/san-pham?category=<%= category.id %>" class="text-decoration-none">Xem tất cả <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-4">
+          <% category.Products.forEach(product => { %>
+            <% 
+              let firstImage = '/images/default-placeholder.png';
+              try {
+                if (product.images && typeof product.images === 'string') {
+                  const images = JSON.parse(product.images);
+                  if (Array.isArray(images) && images.length > 0) { firstImage = images[0]; }
+                }
+              } catch (e) { console.error('Lỗi parse ảnh sản phẩm:', product.id); }
+            %>
+            <div class="col">
+              <div class="card h-100 shadow-sm">
+                <a href="/san-pham/<%= product.id %>">
+                  <img src="<%= firstImage %>" class="card-img-top" alt="<%= product.name %>" style="height: 225px; object-fit: cover;">
+                </a>
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title flex-grow-1"><a href="/san-pham/<%= product.id %>" class="text-decoration-none"><%= product.name %></a></h5>
+                  <p class="card-text product-short-description"><%= product.description.substring(0, 70) %>...</p>
+                  <p class="card-text text-danger fw-bold">
+                    <% if (isNaN(product.price)) { %>
+                      <%= product.price %>
+                    <% } else { %>
+                      <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price) %>
+                    <% } %>
+                  </p>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                  <a href="/san-pham/<%= product.id %>" class="btn btn-sm btn-outline-secondary w-100">Xem chi tiết</a>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
+  <% }) %>
+<% } %>
+
+<!-- Khu vực đánh giá của khách hàng -->
+<% if (testimonials && testimonials.length > 0) { %>
+<div class="testimonial-section my-5">
+  <h2 class="pb-2 border-bottom"><%- settings.testimonials_title %></h2>
+  <div class="row g-4 py-5">
+    <% testimonials.forEach(item => { %>
+      <div class="col-md-6">
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <img src="<%= item.avatarUrl %>" alt="<%= item.name %>" class="testimonial-avatar">
+            <div class="testimonial-author">
+              <div class="testimonial-name"><%= item.name %></div>
+              <div class="testimonial-position"><%= item.position %></div>
+            </div>
+          </div>
+          <div class="testimonial-body">
+            <p>"<%= item.reviewText %>"</p>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+<% } %>

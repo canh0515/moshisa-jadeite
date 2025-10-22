@@ -1,0 +1,282 @@
+:root {
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Montserrat', sans-serif;
+    --color-text: #333;
+    --color-background: #fdfdfd;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+h1, h2, h3, h4, h5, h6, .fs-4, .display-4 {
+    font-family: var(--font-heading);
+}
+
+a {
+    color: var(--color-primary);
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--color-accent);
+}
+/* Bạn có thể thêm các style tùy chỉnh của mình ở đây */
+.card-title {
+    height: 48px; /* Đảm bảo các tiêu đề có chiều cao bằng nhau */
+    overflow: hidden;
+}
+
+.product-short-description {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Header Styles */
+.site-header {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 2rem;
+}
+
+.header-top-bar {
+    background-color: var(--color-primary);
+    font-size: 0.85rem;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.header-top-bar a {
+    color: #fff;
+    opacity: 0.8;
+}
+
+.header-top-bar a:hover {
+    opacity: 1;
+}
+
+.main-nav {
+    background-color: #fff;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.main-nav .nav-link {
+    color: #333;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+.main-nav .nav-link:hover {
+    color: var(--color-accent);
+}
+
+
+
+.site-logo img {
+    max-height: 50px; /* Giới hạn chiều cao của logo */
+    width: auto;
+}
+
+.site-logo span {
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+}
+
+/* Testimonial Styles */
+.testimonial-card {
+    background-color: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    height: 100%;
+}
+
+.testimonial-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.testimonial-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.testimonial-name {
+    font-weight: 600;
+}
+
+.testimonial-position {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.testimonial-body p {
+    font-style: italic;
+    color: #333;
+}
+
+/* Product Card Styles */
+.card {
+    border: 1px solid #f0f0f0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.card .card-text.fw-bold {
+    color: var(--color-accent) !important;
+    font-size: 1.1rem;
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    border-radius: 2px;
+}
+
+.btn-primary:hover {
+    background-color: #12223b; /* Darken primary color */
+    border-color: #12223b;
+}
+
+.btn-outline-secondary {
+    border-radius: 2px;
+}
+
+/* Footer Styles */
+.site-footer {
+    background-color: var(--color-primary);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 4rem 0;
+}
+
+.footer-about-text {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.footer-heading {
+    font-family: var(--font-heading);
+    color: var(--color-accent);
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.footer-links li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: #fff;
+}
+
+.footer-partners img {
+    height: 30px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.copyright-text {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+}
+
+.footer-contact-info span {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Chat Widget Styles */
+.chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+.chat-widget:hover {
+    transform: scale(1.1);
+    color: white;
+}
+
+/* --- Responsive Media Queries --- */
+
+/* Cho máy tính bảng và các thiết bị nhỏ hơn (dưới 992px) */
+@media (max-width: 991.98px) {
+    .main-nav .nav-link {
+        padding: 0.75rem 1rem; /* Giảm padding cho thanh điều hướng */
+        font-size: 0.85rem;
+    }
+
+    .site-logo img {
+        max-height: 40px;
+    }
+
+    .display-4 {
+        font-size: 2.5rem; /* Giảm kích thước font cho tiêu đề lớn */
+    }
+}
+
+/* Cho điện thoại di động (dưới 768px) */
+@media (max-width: 767.98px) {
+    .header-top-bar .d-flex {
+        flex-direction: column; /* Xếp chồng các mục trong thanh trên cùng */
+        align-items: center !important;
+        text-align: center;
+    }
+
+    .header-top-bar .text-end {
+        text-align: center !important;
+        margin-top: 0.5rem;
+    }
+
+    .main-nav .navbar-nav {
+        flex-direction: column; /* Menu chính xếp chồng theo chiều dọc */
+        width: 100%;
+    }
+
+    .main-nav .nav-item {
+        text-align: center;
+        border-bottom: 1px solid #eee;
+    }
+
+    .site-footer .row > div {
+        margin-bottom: 2rem; /* Thêm khoảng cách giữa các cột footer khi chúng xếp chồng */
+    }
+
+    .footer-heading {
+        margin-top: 1rem;
+    }
+
+    .navbar-collapse {
+        text-align: center;
+    }
+}

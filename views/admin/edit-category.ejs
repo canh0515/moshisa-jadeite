@@ -1,0 +1,23 @@
+<%- include('../layouts/admin-header') %>
+
+<h1>Sửa Danh mục</h1>
+<hr>
+<form action="/admin/categories/edit/<%= category.id %>" method="POST">
+    <div class="mb-3">
+        <label for="name" class="form-label">Tên Danh mục</label>
+        <input type="text" class="form-control" id="name" name="name" value="<%= category.name %>" required>
+    </div>
+    <div class="mb-3 form-check">
+        <input 
+            type="checkbox" 
+            class="form-check-input" 
+            id="isFeatured" name="isFeatured" value="true" 
+            <%= category.isFeatured ? 'checked' : '' %>>
+        <label class="form-check-label" for="isFeatured">Hiển thị trên trang chủ</label>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    <a href="/admin/categories" class="btn btn-secondary">Hủy</a>
+</form>
+
+<%- include('../layouts/admin-footer') %>

@@ -1,0 +1,40 @@
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Quản lý Kiến thức</h1>
+    <div>
+        <a href="/admin/knowledge/add" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
+            <i class="bi bi-plus-circle me-2"></i> Thêm bài viết mới
+        </a>
+    </div>
+</div>
+
+<div class="bg-white shadow-md rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tiêu đề</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Danh mục liên quan</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày tạo</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hành động</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            <% if (articles.length > 0) { %>
+                <% articles.forEach(article => { %>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800"><%= article.title %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= article.category %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= new Date(article.createdAt).toLocaleDateString('vi-VN') %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <a href="/admin/edit-knowledge/<%= article.id %>" class="text-indigo-600 hover:text-indigo-900 mr-4">Sửa</a>
+                            <form action="/admin/delete-knowledge/<%= article.id %>" method="POST" class="inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
+                                <button type="submit" class="text-red-600 hover:text-red-900">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">Chưa có bài viết kiến thức nào.</td></tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,284 @@
+<h1 class="text-3xl font-bold text-gray-800 mb-6">Cài đặt chung</h1>
+
+<form action="/admin/settings" method="POST" enctype="multipart/form-data" class="space-y-8">
+
+  <!-- Cài đặt chung -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold mb-4 border-b pb-2">Thông tin Website</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label for="site_name" class="block text-sm font-medium text-gray-700">Tên Website</label>
+        <input type="text" name="site_name" id="site_name" value="<%= settings.site_name %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="phone_number" class="block text-sm font-medium text-gray-700">Số điện thoại (Header)</label>
+        <input type="text" name="phone_number" id="phone_number" value="<%= settings.phone_number %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="logo" class="block text-sm font-medium text-gray-700">Logo Website</label>
+        <input type="file" name="logo" id="logo" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+        <% if (settings.logo_url) { %>
+          <img src="<%= settings.logo_url %>" alt="Current Logo" class="mt-2 h-16 object-contain border p-1 rounded-md">
+        <% } %>
+      </div>
+      <div>
+        <label for="footer_info" class="block text-sm font-medium text-gray-700">Thông tin Copyright (Footer)</label>
+        <input type="text" name="footer_info" id="footer_info" value="<%= settings.footer_info %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+    </div>
+  </div>
+
+  <!-- Cài đặt Banner -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold mb-4 border-b pb-2">Banner Trang chủ</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label for="banner_title" class="block text-sm font-medium text-gray-700">Tiêu đề Banner</label>
+        <input type="text" name="banner_title" id="banner_title" value="<%= settings.banner_title %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="banner_subtitle" class="block text-sm font-medium text-gray-700">Phụ đề Banner</label>
+        <input type="text" name="banner_subtitle" id="banner_subtitle" value="<%= settings.banner_subtitle %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="banner_button_text" class="block text-sm font-medium text-gray-700">Chữ trên nút</label>
+        <input type="text" name="banner_button_text" id="banner_button_text" value="<%= settings.banner_button_text %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="banner_button_link" class="block text-sm font-medium text-gray-700">Link của nút</label>
+        <input type="text" name="banner_button_link" id="banner_button_link" value="<%= settings.banner_button_link %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="banner_article_link" class="block text-sm font-medium text-gray-700">Link bài viết nổi bật</label>
+        <select name="banner_article_link" id="banner_article_link" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+          <option value="">-- Chọn bài viết --</option>
+          <% articles.forEach(article => { %>
+            <option value="/bai-viet/<%= article.slug %>" <%= settings.banner_article_link === '/bai-viet/' + article.slug ? 'selected' : '' %>><%= article.title %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div>
+        <label for="banner_image" class="block text-sm font-medium text-gray-700">Ảnh Banner</label>
+        <input type="file" name="banner_image" id="banner_image" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+        <% if (settings.banner_image_url) { %>
+          <img src="<%= settings.banner_image_url %>" alt="Current Banner" class="mt-2 h-24 object-contain border p-1 rounded-md">
+        <% } %>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Tùy chỉnh Giao diện -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold mb-4 border-b pb-2">Tùy chỉnh Giao diện</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label for="color_primary" class="block text-sm font-medium text-gray-700">Màu chính (Primary Color)</label>
+        <input type="color" name="color_primary" id="color_primary" value="<%= settings.color_primary %>" class="mt-1 h-10 w-full border-gray-300 rounded-md">
+      </div>
+      <div>
+        <label for="color_accent" class="block text-sm font-medium text-gray-700">Màu nhấn (Accent Color)</label>
+        <input type="color" name="color_accent" id="color_accent" value="<%= settings.color_accent %>" class="mt-1 h-10 w-full border-gray-300 rounded-md">
+      </div>
+    </div>
+  </div>
+
+  <!-- Nội dung Footer & Liên hệ -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold mb-4 border-b pb-2">Nội dung Footer & Liên hệ</h2>
+    <div class="space-y-4">
+      <div>
+        <label for="footer_about_us_text" class="block text-sm font-medium text-gray-700">Giới thiệu ngắn (Footer)</label>
+        <textarea name="footer_about_us_text" id="footer_about_us_text" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"><%= settings.footer_about_us_text %></textarea>
+      </div>
+      <div>
+        <label for="about_us_phone" class="block text-sm font-medium text-gray-700">Số điện thoại (Footer)</label>
+        <input type="text" name="about_us_phone" id="about_us_phone" value="<%= settings.about_us_phone %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="about_us_email" class="block text-sm font-medium text-gray-700">Email (Footer)</label>
+        <input type="email" name="about_us_email" id="about_us_email" value="<%= settings.about_us_email %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="about_us_address" class="block text-sm font-medium text-gray-700">Địa chỉ (Footer)</label>
+        <input type="text" name="about_us_address" id="about_us_address" value="<%= settings.about_us_address %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+      <div>
+        <label for="chat_link" class="block text-sm font-medium text-gray-700">Link Chat (Zalo/Messenger)</label>
+        <input type="url" name="chat_link" id="chat_link" value="<%= settings.chat_link %>" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="https://zalo.me/your_zalo_number">
+      </div>
+    </div>
+  </div>
+        
+  <!-- Cài đặt Đối tác -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold mb-4 border-b pb-2">Logo Đối tác</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Đối tác thanh toán -->
+      <div>
+        <h3 class="font-medium text-gray-800 mb-2">Đối tác thanh toán</h3>
+        <div id="payment-partners-list" class="flex flex-wrap gap-4 p-4 border-2 border-dashed rounded-md min-h-[80px]">
+          <% 
+          let paymentPartners = [];
+          if (settings.payment_partners) {
+              try { paymentPartners = JSON.parse(settings.payment_partners); } catch(e) {}
+          }
+          %>
+          <% if (paymentPartners.length > 0) { %>
+            <% paymentPartners.forEach(logoUrl => { %>
+              <div class="relative group" data-logo-url="<%= logoUrl %>">
+                <img src="<%= logoUrl %>" class="h-12 bg-white p-1 border rounded">
+                <button type="button" onclick="deleteLogo(this, 'payment_partners', '<%= logoUrl %>')" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+            <% }) %>
+          <% } %>
+        </div>
+        <input type="hidden" name="existing_payment_partners" id="existing_payment_partners" value="<%= settings.payment_partners || '[]' %>">
+        <label for="payment_partners" class="block text-sm font-medium text-gray-700 mt-4">Thêm logo mới</label>
+        <input type="file" name="payment_partners" id="payment_partners" multiple class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+      </div>
+
+      <!-- Đối tác vận chuyển -->
+      <div>
+        <h3 class="font-medium text-gray-800 mb-2">Đối tác vận chuyển</h3>
+        <div id="shipping-partners-list" class="flex flex-wrap gap-4 p-4 border-2 border-dashed rounded-md min-h-[80px]">
+          <% 
+          let shippingPartners = [];
+          if (settings.shipping_partners) {
+              try { shippingPartners = JSON.parse(settings.shipping_partners); } catch(e) {}
+          }
+          %>
+          <% if (shippingPartners.length > 0) { %>
+            <% shippingPartners.forEach(logoUrl => { %>
+              <div class="relative group" data-logo-url="<%= logoUrl %>">
+                <img src="<%= logoUrl %>" class="h-12 bg-white p-1 border rounded">
+                <button type="button" onclick="deleteLogo(this, 'shipping_partners', '<%= logoUrl %>')" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+            <% }) %>
+          <% } %>
+        </div>
+        <input type="hidden" name="existing_shipping_partners" id="existing_shipping_partners" value="<%= settings.shipping_partners || '[]' %>">
+        <label for="shipping_partners" class="block text-sm font-medium text-gray-700 mt-4">Thêm logo mới</label>
+        <input type="file" name="shipping_partners" id="shipping_partners" multiple class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+      </div>
+    </div>
+  </div>
+
+  <!-- Nút Lưu -->
+  <div class="flex justify-end">
+    <button type="submit" class="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      Lưu thay đổi
+    </button>
+  </div>
+</form>
+
+<!-- Quản lý Carousel -->
+<div class="bg-white p-6 rounded-lg shadow-md mt-8">
+  <h2 class="text-xl font-semibold mb-4 border-b pb-2">Quản lý Slideshow</h2>
+  <div class="mb-6">
+    <h3 class="font-medium text-gray-800 mb-2">Thêm Slide mới</h3>
+    <form action="/admin/carousel/add" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+      <input type="text" name="title" placeholder="Tiêu đề slide" class="block w-full border-gray-300 rounded-md shadow-sm">
+      <input type="text" name="description" placeholder="Mô tả ngắn" class="block w-full border-gray-300 rounded-md shadow-sm">
+      <input type="text" name="link" placeholder="Link (ví dụ: /san-pham/ten-san-pham)" class="block w-full border-gray-300 rounded-md shadow-sm">
+      <input type="file" name="slide_image" required class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+      <button type="submit" class="py-2 px-4 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75">Thêm Slide</button>
+    </form>
+  </div>
+  <div>
+    <h3 class="font-medium text-gray-800 mb-2">Các Slide hiện tại</h3>
+    <div class="space-y-4">
+      <% slides.forEach(slide => { %>
+        <div id="slide-<%= slide.id %>" class="flex items-center justify-between p-3 bg-gray-50 rounded-md border">
+          <div class="flex items-center gap-4">
+            <img src="<%= slide.imageUrl %>" class="h-12 w-24 object-cover rounded">
+            <div>
+              <p class="font-semibold"><%= slide.title %></p>
+              <p class="text-sm text-gray-500"><%= slide.description %></p>
+            </div>
+          </div>
+          <button type="button" onclick="deleteSlide('<%= slide.id %>')" class="text-red-500 hover:text-red-700">
+            <i class="bi bi-trash-fill text-lg"></i>
+          </button>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Hàm xóa logo đối tác
+  function deleteLogo(buttonElement, partnerType, logoUrl) {
+    if (!confirm('Bạn có chắc chắn muốn xóa logo này?')) {
+      return;
+    }
+
+    fetch('/admin/settings/delete-logo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ partnerType, logoUrl }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // 1. Xóa phần tử hình ảnh khỏi giao diện
+        const logoDiv = buttonElement.parentElement;
+        logoDiv.remove();
+
+        // 2. Cập nhật giá trị của input ẩn
+        const hiddenInputId = `existing_${partnerType}`;
+        const hiddenInput = document.getElementById(hiddenInputId);
+        
+        try {
+          let currentLogos = JSON.parse(hiddenInput.value);
+          let updatedLogos = currentLogos.filter(url => url !== logoUrl);
+          hiddenInput.value = JSON.stringify(updatedLogos);
+        } catch(e) {
+          console.error("Lỗi khi cập nhật input ẩn:", e);
+        }
+
+        alert('Đã xóa logo thành công.');
+      } else {
+        alert('Lỗi: ' + data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Đã xảy ra lỗi khi kết nối tới server.');
+    });
+  }
+
+  // Hàm xóa slide
+  function deleteSlide(slideId) {
+    if (!confirm('Bạn có chắc chắn muốn xóa slide này?')) {
+      return;
+    }
+
+    fetch('/admin/carousel/delete', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ slideId }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById(`slide-${slideId}`).remove();
+        alert('Đã xóa slide thành công.');
+      } else {
+        alert('Lỗi: ' + data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Đã xảy ra lỗi khi kết nối tới server.');
+    });
+  }
+</script>

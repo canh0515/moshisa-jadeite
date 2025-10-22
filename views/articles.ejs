@@ -1,0 +1,27 @@
+<div class="container my-5">
+    <h1 class="pb-2 border-bottom mb-4">Bài viết</h1>
+
+    <% if (articles && articles.length > 0) { %>
+        <div class="row g-5">
+            <% articles.forEach(article => { %>
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <h3 class="mb-0"><%= article.title %></h3>
+                            <div class="mb-1 text-muted"><%= new Date(article.createdAt).toLocaleDateString('vi-VN') %></div>
+                            <p class="card-text mb-auto"><%- article.content.replace(/<[^>]+>/g, '').substring(0, 100) %>...</p>
+                            <a href="/bai-viet/<%= article.slug %>" class="stretched-link">Đọc tiếp</a>
+                        </div>
+                        <% if (article.imageUrl) { %>
+                            <div class="col-auto d-none d-lg-block">
+                                <img src="<%= article.imageUrl %>" width="200" height="250" style="object-fit: cover;" alt="Thumbnail">
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <p>Chưa có bài viết nào.</p>
+    <% } %>
+</div>
