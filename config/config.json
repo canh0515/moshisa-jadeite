@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "moshisa_user",
+    "password": "your_strong_password",
+    "database": "moshisa_jadeite_db",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "moshisa_user",
+    "password": "your_strong_password",
+    "database": "moshisa_jadeite_db",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "moshisa_user",
+    "password": "your_strong_password",
+    "database": "moshisa_jadeite_db",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
+}
