@@ -13,6 +13,12 @@ router.get('/logout', adminController.getLogout);
 // --- Protected Admin Routes (middleware `isLoggedIn` sẽ được áp dụng cho tất cả các route bên dưới) ---
 router.use(isLoggedIn);
 
+// Middleware để đặt layout cho tất cả các route admin được bảo vệ
+router.use((req, res, next) => {
+  res.locals.layout = 'admin/layout';
+  next();
+});
+
 // GET /admin
 router.get('/', adminController.getAdminPage);
 
@@ -20,13 +26,19 @@ router.get('/', adminController.getAdminPage);
 router.get('/add-product', adminController.getAddProductPage);
 
 // POST /admin/add-product - sử dụng middleware upload.array('images', 10)
-router.post('/add-product', upload.array('images', 10), adminController.postAddProduct);
+router.post('/add-product', upload.fields([
+  { name: 'images', maxCount: 10 },
+  { name: 'videos', maxCount: 5 } // Cho phép upload tối đa 5 video
+]), adminController.postAddProduct);
 
 // GET /admin/edit-product/:id - Hiển thị form sửa sản phẩm
 router.get('/edit-product/:id', adminController.getEditProductPage);
 
 // POST /admin/edit-product/:id - Cập nhật sản phẩm
-router.post('/edit-product/:id', upload.array('new_images', 10), adminController.postEditProduct);
+router.post('/edit-product/:id', upload.fields([
+  { name: 'new_images', maxCount: 10 },
+  { name: 'new_videos', maxCount: 5 } // Cho phép upload tối đa 5 video mới
+]), adminController.postEditProduct);
 
 // POST /admin/delete-product/:id - Xóa sản phẩm
 router.post('/delete-product/:id', adminController.postDeleteProduct);
@@ -68,7 +80,7 @@ router.get('/testimonials/edit/:id', adminController.getEditTestimonialPage);
 router.post('/testimonials/edit/:id', upload.single('avatar'), adminController.postEditTestimonial);
 
 // POST /admin/testimonials/delete/:id
-router.post('/testimonials/delete/:id', adminController.postDeleteTestimonial);
+router.post('/testimonials/delete', adminController.postDeleteTestimonial);
 
 // --- Knowledge Routes ---
 
@@ -133,6 +145,9 @@ router.get('/videos', adminController.getVideosPage);
 
 // POST /admin/videos/upload
 router.post('/videos/upload', upload.single('video'), adminController.postUploadVideo);
+
+// POST /admin/videos/delete
+router.post('/videos/delete', adminController.postDeleteVideo);
 
 // --- Page Content Routes ---
 

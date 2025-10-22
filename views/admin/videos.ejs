@@ -1,39 +1,67 @@
-<div class="flex justify-between items-center mb-6">
+<div class="space-y-8">
     <h1 class="text-3xl font-bold text-gray-800">Thư viện Video</h1>
-</div>
 
-<!-- Form Upload -->
-<div class="bg-white p-6 rounded-lg shadow-md mb-8">
-    <h2 class="text-xl font-semibold mb-4">Upload Video mới</h2>
-    <form action="/admin/videos/upload" method="POST" enctype="multipart/form-data">
-        <div>
-            <label for="video" class="block text-sm font-medium text-gray-700">Chọn file video</label>
-            <input type="file" name="video" id="video" required accept="video/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+    <!-- Flash Messages -->
+    <% if (successMessage && successMessage.length > 0) { %>
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+            <p class="font-bold">Thành công</p>
+            <p><%= successMessage[0] %></p>
         </div>
-        <div class="mt-4">
-            <button type="submit" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700">Upload</button>
-        </div>
-    </form>
-</div>
-
-<!-- Danh sách video -->
-<div class="bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold mb-4">Các video đã upload</h2>
-    <% if (videos.length > 0) { %>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <% videos.forEach(videoUrl => { %>
-                <div class="border rounded-lg p-2">
-                    <video controls class="w-full h-auto rounded">
-                        <source src="<%= videoUrl %>" type="video/mp4">
-                        Trình duyệt của bạn không hỗ trợ thẻ video.
-                    </video>
-                    <div class="mt-2 text-center">
-                        <input type="text" readonly value="<%= videoUrl %>" class="w-full text-xs text-center border-gray-300 rounded-md bg-gray-100" onclick="this.select()">
-                    </div>
-                </div>
-            <% }) %>
-        </div>
-    <% } else { %>
-        <p class="text-center text-gray-500">Chưa có video nào được upload.</p>
     <% } %>
+    <% if (errorMessage && errorMessage.length > 0) { %>
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+            <p class="font-bold">Lỗi</p>
+            <p><%= errorMessage[0] %></p>
+        </div>
+    <% } %>
+
+    <!-- Upload Form -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Upload Video Mới</h2>
+        <div>
+            <form action="/admin/videos/upload" method="POST" enctype="multipart/form-data">
+                <div class="mb-4">
+                    <label for="videoFile" class="block text-gray-700 text-sm font-bold mb-2">Chọn file video (mp4, webm, ogg)</label>
+                    <input class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" type="file" id="videoFile" name="video" accept=".mp4,.webm,.ogg" required>
+                </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Upload
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Video Grid -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Danh sách Video</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <% if (videos.length > 0) { %>
+                <% videos.forEach(video => { %>
+                    <div class="group relative overflow-hidden rounded-lg shadow-lg">
+                        <%
+                            const videoExtension = video.split('.').pop();
+                            let mimeType = 'video/mp4'; // Mặc định là MP4
+                            if (videoExtension === 'webm') { mimeType = 'video/webm'; }
+                            else if (videoExtension === 'ogg') { mimeType = 'video/ogg'; }
+                        %>
+                        <video controls class="w-full h-auto object-cover bg-black rounded-t-lg">
+                            <source src="<%= video %>" type="<%= mimeType %>">
+                            Trình duyệt của bạn không hỗ trợ thẻ video.
+                        </video>
+                        <div class="p-3">
+                            <p class="text-gray-600 text-sm truncate mb-3"><%= video.split('/').pop() %></p>
+                            <form action="/admin/videos/delete" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa video này không?');">
+                                <input type="hidden" name="videoUrl" value="<%= video %>">
+                                <button type="submit" class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors">
+                                    <i class="bi bi-trash-fill mr-2"></i>Xóa Video
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p class="col-span-full text-center text-gray-500">Chưa có video nào trong thư viện.</p>
+            <% } %>
+        </div>
+    </div>
 </div>

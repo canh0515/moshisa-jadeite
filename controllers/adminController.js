@@ -50,7 +50,6 @@ exports.getAdminPage = async (req, res) => {
       products: products,
       successMessage: req.flash('success'), // Lấy thông báo thành công
       errorMessage: req.flash('error'),     // Lấy thông báo lỗi
-      layout: 'admin/layout'
     });
   } catch (err) {
     console.error(err);
@@ -73,28 +72,37 @@ exports.getAddProductPage = async (req, res) => {
   res.render('admin/add-product', {
     pageTitle: 'Thêm Sản Phẩm Mới',
     categories: categories,
-    videos: videos,
-    layout: 'admin/layout',
+    videos: videos
   });
 };
 
 // Xử lý việc thêm sản phẩm mới
 exports.postAddProduct = async (req, res) => {
   const { name, price, description, categories, video_urls } = req.body;
-  
-  // req.files là một mảng các object file được upload bởi multer
-  if (!req.files || req.files.length === 0) {
-    return res.status(400).send('Vui lòng upload ít nhất một hình ảnh.');
+  const uploadedImages = req.files.images || [];
+  const uploadedVideos = req.files.videos || [];
+
+  // req.files là một object chứa các mảng file được upload bởi multer
+  if (uploadedImages.length === 0) {
+    req.flash('error', 'Vui lòng upload ít nhất một hình ảnh.');
+    return res.redirect('back');
   }
 
-  // Lấy đường dẫn của các file đã upload và lưu vào mảng
-  const imagePaths = req.files.map(file => '/uploads/' + file.filename);
+  // Lấy đường dẫn của các file ảnh đã upload
+  const imagePaths = uploadedImages.map(file => '/uploads/' + file.filename);
+
+  // Lấy đường dẫn của các file video đã upload
+  const videoPaths = uploadedVideos.map(file => '/uploads/' + file.filename);
+
+  // Gộp các video đã chọn từ thư viện và video mới upload
+  const existingVideoUrls = video_urls ? JSON.parse(video_urls) : [];
+  const allVideoUrls = JSON.stringify([...existingVideoUrls, ...videoPaths]);
 
   try {
     const product = await Product.create({
       name, price, description,
       images: JSON.stringify(imagePaths), // Chuyển mảng thành chuỗi JSON để lưu
-      video_urls: video_urls || '[]' // Lưu mảng video urls
+      video_urls: allVideoUrls // Lưu mảng tất cả video urls
     });
     // Đảm bảo `categories` luôn là một mảng
     const categoriesToSet = categories ? (Array.isArray(categories) ? categories : [categories]) : [];
@@ -142,7 +150,6 @@ exports.getEditProductPage = async (req, res) => {
       product: product,
       categories: categories,
       videos: videos,
-      layout: 'admin/layout'
     });
   } catch (err) {
     console.error('Lỗi khi lấy sản phẩm để sửa:', err);
@@ -156,36 +163,48 @@ exports.postEditProduct = async (req, res) => {
   const { name, price, description, categories, existing_media, video_urls } = req.body;
 
   // Bắt đầu một transaction
-  const t = await sequelize.transaction();
-
   try {
     await sequelize.transaction(async (t) => {
       const product = await Product.findByPk(productId, { transaction: t });
       if (!product) {
-        return res.status(404).send('Không tìm thấy sản phẩm');
+        throw new Error('Không tìm thấy sản phẩm');
       }
 
-      let mediaPaths = []; // Đổi tên thành mediaPaths để chứa cả ảnh và video
+      // Xử lý ảnh
+      let imagePaths = [];
       try {
-        // Chỉ parse nếu existing_media tồn tại và là một chuỗi
         if (typeof existing_media === 'string' && existing_media.length > 0) {
-          mediaPaths = JSON.parse(existing_media);
+          imagePaths = JSON.parse(existing_media);
         }
       } catch (e) {
-        console.error('Lỗi khi parse existing_images JSON:', e);
-        // Có thể trả về lỗi cho người dùng nếu cần
+        console.error('Lỗi khi parse existing_media JSON:', e);
       }
 
       // Thêm ảnh mới nếu có
-      if (req.files && req.files.length > 0) {
-        const newImagePaths = req.files.map(file => '/uploads/' + file.filename);
-        mediaPaths.push(...newImagePaths);
+      if (req.files && req.files.new_images) {
+        const newImagePaths = req.files.new_images.map(file => '/uploads/' + file.filename);
+        imagePaths.push(...newImagePaths);
+      }
+
+      // Xử lý video
+      let videoPaths = [];
+      try {
+        if (typeof video_urls === 'string' && video_urls.length > 0) {
+          videoPaths = JSON.parse(video_urls);
+        }
+      } catch (e) {
+        console.error('Lỗi khi parse video_urls JSON:', e);
+      }
+      if (req.files && req.files.new_videos) {
+        const newVideoPaths = req.files.new_videos.map(file => '/uploads/' + file.filename);
+        videoPaths.push(...newVideoPaths);
       }
 
       // Cập nhật thông tin sản phẩm
       await product.update({
-        name, price, description, video_urls,
-        images: JSON.stringify(mediaPaths) // Lưu mảng media đã được sắp xếp
+        name, price, description,
+        images: JSON.stringify(imagePaths),
+        video_urls: JSON.stringify(videoPaths)
       }, { transaction: t });
 
       // Đảm bảo `categories` luôn là một mảng, ngay cả khi chỉ có một giá trị được chọn
@@ -220,8 +239,7 @@ exports.getSettingsPage = async (req, res) => {
   res.render('admin/settings', {
     pageTitle: 'Cài đặt chung',
     articles: articles,
-    slides: slides,
-    layout: 'admin/layout'
+      slides: slides
   });
 };
 
@@ -370,7 +388,6 @@ exports.getTestimonialsPage = async (req, res) => {
     res.render('admin/testimonials', {
       pageTitle: 'Quản lý Đánh giá',
       testimonials: testimonials,
-      layout: 'admin/layout'
     });
   } catch (err) {
     console.error(err);
@@ -381,8 +398,7 @@ exports.getTestimonialsPage = async (req, res) => {
 // Hiển thị form thêm đánh giá
 exports.getAddTestimonialPage = (req, res) => {
   res.render('admin/add-testimonial', {
-    pageTitle: 'Thêm Đánh giá mới',
-    layout: 'admin/layout'
+    pageTitle: 'Thêm Đánh giá mới'
   });
 };
 
@@ -412,8 +428,7 @@ exports.getEditTestimonialPage = async (req, res) => {
     }
     res.render('admin/edit-testimonial', {
       pageTitle: 'Sửa Đánh giá',
-      testimonial: testimonial,
-      layout: 'admin/layout'
+      testimonial: testimonial
     });
   } catch (err) {
     console.error('Lỗi khi lấy đánh giá để sửa:', err);
@@ -446,7 +461,8 @@ exports.postEditTestimonial = async (req, res) => {
 // Xử lý xóa đánh giá
 exports.postDeleteTestimonial = async (req, res) => {
   try {
-    await Testimonial.destroy({ where: { id: req.params.id } });
+    const { id } = req.body;
+    await Testimonial.destroy({ where: { id: id } });
     res.redirect('/admin/testimonials');
   } catch (err) {
     console.error('Lỗi khi xóa đánh giá:', err);
@@ -463,7 +479,6 @@ exports.getKnowledgePage = async (req, res) => {
     res.render('admin/knowledge', {
       pageTitle: 'Quản lý Kiến thức',
       articles: articles,
-      layout: 'admin/layout'
     });
   } catch (err) {
     console.error(err);
@@ -477,7 +492,6 @@ exports.getAddKnowledgePage = async (req, res) => {
   res.render('admin/add-knowledge', {
     pageTitle: 'Thêm bài viết mới',
     categories: categories,
-    layout: 'admin/layout'
   });
 };
 
@@ -551,7 +565,6 @@ exports.getArticlesPage = async (req, res) => {
     res.render('admin/articles', {
       pageTitle: 'Quản lý Bài viết',
       articles: articles,
-      layout: 'admin/layout'
     });
   } catch (err) {
     console.error(err);
@@ -561,8 +574,7 @@ exports.getArticlesPage = async (req, res) => {
 
 exports.getAddArticlePage = (req, res) => {
   res.render('admin/add-article', {
-    pageTitle: 'Thêm Bài viết mới',
-    layout: 'admin/layout'
+    pageTitle: 'Thêm Bài viết mới'
   });
 };
 
@@ -594,7 +606,6 @@ exports.getEditArticlePage = async (req, res) => {
     res.render('admin/edit-article', {
       pageTitle: 'Sửa Bài viết',
       article: article,
-      layout: 'admin/layout'
     });
   } catch (err) {
     console.error('Lỗi khi lấy bài viết để sửa:', err);
@@ -646,7 +657,6 @@ exports.getCategoryPage = async (req, res) => {
     res.render('admin/categories', {
       pageTitle: 'Quản lý Danh mục',
       categories: categories,
-      layout: 'admin/layout'
     });
   } catch (err) {
     console.error(err);
@@ -657,8 +667,7 @@ exports.getCategoryPage = async (req, res) => {
 // Hiển thị form thêm danh mục
 exports.getAddCategoryPage = (req, res) => {
   res.render('admin/add-category', {
-    pageTitle: 'Thêm Danh mục mới',
-    layout: 'admin/layout'
+    pageTitle: 'Thêm Danh mục mới'
   });
 };
 
@@ -684,7 +693,6 @@ exports.getEditCategoryPage = async (req, res) => {
     res.render('admin/edit-category', {
       pageTitle: 'Sửa Danh mục',
       category: category,
-      layout: 'admin/layout'
     });
   } catch (err) {
     console.error('Lỗi khi lấy danh mục để sửa:', err);
@@ -724,7 +732,8 @@ exports.getVideosPage = async (req, res) => {
     res.render('admin/videos', {
       pageTitle: 'Thư viện Video',
       videos: videos,
-      layout: 'admin/layout'
+      successMessage: req.flash('success'),
+      errorMessage: req.flash('error')
     });
   } catch (err) {
     console.error("Lỗi khi đọc thư mục video:", err);
@@ -739,6 +748,38 @@ exports.postUploadVideo = (req, res) => {
   } else {
     req.flash('success', 'Upload video thành công!');
   }
+  res.redirect('/admin/videos');
+};
+
+// Xử lý xóa video
+exports.postDeleteVideo = async (req, res) => {
+  const { videoUrl } = req.body; // ví dụ: /uploads/my-video.mp4
+
+  if (!videoUrl) {
+    req.flash('error', 'Không có video nào được chọn để xóa.');
+    return res.redirect('/admin/videos');
+  }
+
+  try {
+    // Xây dựng đường dẫn tuyệt đối đến file
+    // videoUrl có dạng '/uploads/video.mp4', ta cần lấy tên file
+    const filename = path.basename(videoUrl);
+    const filePath = path.join(__dirname, '..', 'public', 'uploads', filename);
+
+    // Kiểm tra file có tồn tại không trước khi xóa
+    await fs.access(filePath);
+    await fs.unlink(filePath);
+
+    req.flash('success', `Đã xóa video "${filename}" thành công!`);
+  } catch (error) {
+    console.error('Lỗi khi xóa video:', error);
+    if (error.code === 'ENOENT') {
+      req.flash('error', 'Không tìm thấy file video để xóa.');
+    } else {
+      req.flash('error', 'Đã xảy ra lỗi khi xóa video.');
+    }
+  }
+
   res.redirect('/admin/videos');
 };
 
@@ -784,7 +825,6 @@ exports.getPageEditor = async (req, res) => {
     pageTitle: config.title,
     pageKey: pageKey,
     content: setting ? setting.value : '',
-    layout: 'admin/layout'
   });
 };
 

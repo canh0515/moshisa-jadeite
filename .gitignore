@@ -1,2 +1,10 @@
 # Dependencies
 /node_modules
+
+# Environment variables
+.env
+
+# Data and log files
+database.sqlite
+*.sql
+*.log
