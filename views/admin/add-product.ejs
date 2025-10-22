@@ -1,0 +1,170 @@
+<h1 class="text-3xl font-bold text-gray-800 mb-6">Thêm sản phẩm mới</h1>
+
+<div class="bg-white p-8 rounded-lg shadow-md">
+    <form action="/admin/add-product" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Tên sản phẩm</label>
+            <input type="text" name="name" id="name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        <div>
+            <label for="price" class="block text-sm font-medium text-gray-700">Giá</label>
+            <input type="text" name="price" id="price" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        <div>
+            <label for="description" class="block text-sm font-medium text-gray-700">Mô tả</label>
+            <textarea name="description" id="description" rows="5" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+        </div>
+
+        <div>
+            <label for="images" class="block text-sm font-medium text-gray-700">Hình ảnh sản phẩm</label>
+            <input type="file" name="images" id="images" multiple required class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100">
+            <p class="mt-1 text-xs text-gray-500">Bạn có thể chọn nhiều ảnh.</p>
+        </div>
+
+        <div>
+            <label for="video_url" class="block text-sm font-medium text-gray-700">Video sản phẩm</label>
+            <div class="mt-2">
+                <div id="selected-videos-container" class="flex flex-wrap gap-2 p-2 border rounded-md min-h-[50px] bg-gray-50">
+                    <!-- Các video đã chọn sẽ được thêm vào đây bằng JS -->
+                </div>
+                <button type="button" onclick="toggleVideoModal(true)" class="mt-2 px-4 py-2 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 text-sm">
+                    <i class="bi bi-collection-play"></i>
+                    Chọn từ thư viện
+                </button>
+            </div>
+            <input type="hidden" name="video_urls" id="video_urls_input" value="[]">
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Danh mục</label>
+            <div class="mt-2 space-y-2">
+                <% if (categories.length > 0) { %>
+                    <% categories.forEach(category => { %>
+                        <div class="flex items-center">
+                            <input id="category-<%= category.id %>" name="categories" value="<%= category.id %>" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                            <label for="category-<%= category.id %>" class="ml-3 block text-sm text-gray-900"><%= category.name %></label>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="text-sm text-gray-500">Chưa có danh mục nào. Vui lòng <a href="/admin/categories/add" class="text-indigo-600 hover:underline">thêm danh mục</a> trước.</p>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="flex justify-end space-x-4">
+            <a href="/admin" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Hủy</a>
+            <button type="submit" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Thêm sản phẩm</button>
+        </div>
+    </form>
+</div>
+
+<!-- Video Library Modal -->
+<div id="video-library-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-2/3 shadow-lg rounded-md bg-white">
+        <div class="flex justify-between items-center border-b pb-3 mb-4">
+            <h3 class="text-2xl font-bold">Thư viện Video</h3>
+            <button type="button" onclick="toggleVideoModal(false)" class="text-gray-400 hover:text-gray-600">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="max-h-[60vh] overflow-y-auto">
+            <% if (videos.length > 0) { %>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <% videos.forEach(videoUrl => { %>
+                        <div class="video-item border rounded-lg p-2 cursor-pointer hover:border-indigo-500 transition relative" data-url="<%= videoUrl %>" onclick="toggleVideoSelectionInModal('<%= videoUrl %>', this)">
+                            <video class="w-full h-auto rounded pointer-events-none">
+                                <source src="<%= videoUrl %>" type="video/mp4">
+                            </video>
+                            <div class="mt-2 text-center">
+                                <p class="text-xs truncate"><%= videoUrl.split('/').pop() %></p>
+                            </div>
+                            <!-- Checkbox Overlay -->
+                            <div class="absolute top-2 right-2">
+                                <input type="checkbox" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 pointer-events-none">
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="text-center py-10">
+                    <p class="text-gray-500">Chưa có video nào trong thư viện.</p>
+                    <a href="/admin/videos" class="mt-4 inline-block px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700">
+                        Đi đến trang Upload
+                    </a>
+                </div>
+            <% } %>
+        </div>
+        <div class="flex justify-end pt-4 border-t">
+            <button type="button" onclick="confirmVideoSelection()" class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700">Xác nhận</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const videoModal = document.getElementById('video-library-modal');
+    const videoUrlsInput = document.getElementById('video_urls_input');
+    const selectedVideosContainer = document.getElementById('selected-videos-container');
+    let tempSelectedVideos = [];
+
+    // Hàm để bật/tắt modal
+    function toggleVideoModal(show) {
+        if (show) {
+            try {
+                tempSelectedVideos = JSON.parse(videoUrlsInput.value);
+            } catch(e) {
+                tempSelectedVideos = [];
+            }
+            updateModalSelection();
+            videoModal.classList.remove('hidden');
+        } else {
+            videoModal.classList.add('hidden');
+        }
+    }
+
+    // Hàm để chọn/bỏ chọn video trong modal
+    function toggleVideoSelectionInModal(videoUrl, element) {
+        const index = tempSelectedVideos.indexOf(videoUrl);
+        const checkbox = element.querySelector('input[type="checkbox"]');
+        if (index > -1) {
+            tempSelectedVideos.splice(index, 1);
+            checkbox.checked = false;
+            element.classList.remove('border-indigo-500', 'shadow-lg');
+        } else {
+            tempSelectedVideos.push(videoUrl);
+            checkbox.checked = true;
+            element.classList.add('border-indigo-500', 'shadow-lg');
+        }
+    }
+
+    // Hàm xác nhận lựa chọn và đóng modal
+    function confirmVideoSelection() {
+        videoUrlsInput.value = JSON.stringify(tempSelectedVideos);
+        renderSelectedVideos();
+        toggleVideoModal(false);
+    }
+
+    // Hàm để render các video đã chọn ra ngoài form chính
+    function renderSelectedVideos() {
+        selectedVideosContainer.innerHTML = '';
+        const selected = JSON.parse(videoUrlsInput.value || '[]');
+        selected.forEach(url => {
+            const videoEl = `<div class="p-1 border rounded text-xs bg-gray-100">${url.split('/').pop()}</div>`;
+            selectedVideosContainer.innerHTML += videoEl;
+        });
+    }
+
+    // Hàm cập nhật trạng thái 'đã chọn' trong modal
+    function updateModalSelection() {
+        videoModal.querySelectorAll('.video-item').forEach(item => {
+            const url = item.getAttribute('data-url');
+            const isSelected = tempSelectedVideos.includes(url);
+            item.querySelector('input[type="checkbox"]').checked = isSelected;
+            item.classList.toggle('border-indigo-500', isSelected);
+            item.classList.toggle('shadow-lg', isSelected);
+        });
+    }
+
+    renderSelectedVideos();
+</script>

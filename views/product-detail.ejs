@@ -1,0 +1,110 @@
+<div class="container my-5">
+    <div class="row">
+        <!-- Cột Media (Ảnh & Video) -->
+        <div class="col-md-6">
+            <!-- Media chính -->
+            <div class="mb-3">
+                <% if (videos && videos.length > 0) { %>
+                    <div class="ratio ratio-16x9">
+                        <video id="main-media-video" controls class="w-100 rounded" autoplay muted loop>
+                            <source src="<%= videos[0] %>" type="video/mp4">
+                        </video>
+                    </div>
+                    <img id="main-media-image" src="" class="img-fluid rounded d-none" alt="<%= product.name %>" style="width: 100%; height: auto; max-height: 500px; object-fit: cover;">
+                <% } else if (images && images.length > 0) { %>
+                    <img id="main-media-image" src="<%= images[0] %>" class="img-fluid rounded" alt="<%= product.name %>" style="width: 100%; height: auto; max-height: 500px; object-fit: cover;">
+                    <div class="ratio ratio-16x9 d-none">
+                        <video id="main-media-video" controls class="w-100 rounded" autoplay muted loop></video>
+                    </div>
+                <% } else { %>
+                    <img id="main-media-image" src="/images/default-placeholder.png" class="img-fluid rounded" alt="Placeholder">
+                <% } %>
+            </div>
+            <!-- Danh sách thumbnail -->
+            <div class="d-flex flex-wrap">
+                <% videos.forEach(videoUrl => { %>
+                    <div class="p-1 border m-1 rounded cursor-pointer thumbnail-item" onclick="showMedia('<%= videoUrl %>', 'video')">
+                        <video class="pointer-events-none" style="width: 80px; height: 80px; object-fit: cover;"><source src="<%= videoUrl %>"></video>
+                    </div>
+                <% }) %>
+                <% images.forEach(imgUrl => { %>
+                    <div class="p-1 border m-1 rounded cursor-pointer thumbnail-item" onclick="showMedia('<%= imgUrl %>', 'image')">
+                        <img src="<%= imgUrl %>" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+
+        <!-- Cột thông tin sản phẩm -->
+        <div class="col-md-6">
+            <h1 class="product-title"><%= product.name %></h1>
+            <div class="product-price my-3">
+                <% if (isNaN(product.price)) { %>
+                    <%= product.price %>
+                <% } else { %>
+                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price) %>
+                <% } %>
+            </div>
+            <div class="product-category">
+                <strong>Danh mục:</strong> 
+                <% product.Categories.forEach((cat, index) => { %>
+                    <a href="/san-pham?category=<%= cat.id %>" class="badge bg-light text-dark text-decoration-none"><%= cat.name %></a>
+                <% }) %>
+            </div>
+            
+            <div class="product-actions my-4">
+                <button class="btn btn-primary btn-lg">Thêm vào giỏ hàng</button>
+            </div>
+
+            <hr>
+
+            <div class="product-description">
+                <h5 class="mb-3">Mô tả sản phẩm</h5>
+                <p><%- product.description.replace(/\n/g, '<br>') %></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Khu vực thông tin kiến thức liên quan -->
+    <% if (knowledgeArticles && knowledgeArticles.length > 0) { %>
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="pb-2 border-bottom">Kiến thức liên quan</h3>
+                <% knowledgeArticles.forEach(article => { %>
+                    <div class="knowledge-section p-4 rounded mb-3" style="background-color: #f8f9fa;">
+                        <h4 class="mb-3">Kiến thức về <%= article.category %></h4>
+                        <p><%- article.content.substring(0, 400) %>...</p>
+                        <a href="/kien-thuc/<%= article.slug %>" class="btn btn-outline-secondary">Đọc thêm về <%= article.category %></a>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<script>
+    const mainImage = document.getElementById('main-media-image');
+    const mainVideo = document.getElementById('main-media-video');
+    const mainVideoContainer = mainVideo ? mainVideo.parentElement : null;
+
+    function showMedia(url, type) {
+        if (type === 'video') {
+            if (mainVideo) {
+                mainVideo.querySelector('source').src = url;
+                mainVideo.load();
+                mainVideoContainer.classList.remove('d-none');
+            }
+            if (mainImage) {
+                mainImage.classList.add('d-none');
+            }
+        } else { // type === 'image'
+            if (mainImage) {
+                mainImage.src = url;
+                mainImage.classList.remove('d-none');
+            }
+            if (mainVideoContainer) {
+                mainVideoContainer.classList.add('d-none');
+            }
+        }
+    }
+</script>

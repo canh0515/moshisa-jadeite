@@ -1,0 +1,54 @@
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Quản lý sản phẩm</h1>
+    <div>
+        <a href="/admin/add-product" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
+            <i class="bi bi-plus-circle me-2"></i> Thêm sản phẩm mới
+        </a>
+    </div>
+</div>
+
+<div class="bg-white shadow-md rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+        <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên sản phẩm</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giá</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Danh mục</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hành động</th>
+        </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+        <% if (products.length > 0) { %>
+            <% products.forEach((product, index) => { %>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= index + 1 %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800"><%= product.name %></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <% if (isNaN(product.price)) { %>
+                            <%= product.price %>
+                        <% } else { %>
+                            <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price) %>
+                        <% } %>
+                    </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <% if (product.Categories && product.Categories.length > 0) { %>
+                                <%= product.Categories.map(c => c.name).join(', ') %>
+                            <% } %>
+                        </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <a href="/admin/edit-product/<%= product.id %>" class="text-indigo-600 hover:text-indigo-900 mr-4">Sửa</a>
+                        <form action="/admin/delete-product/<%= product.id %>" method="POST" class="inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
+                            <button type="submit" class="text-red-600 hover:text-red-900">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        <% } else { %>
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-center text-gray-500">Chưa có sản phẩm nào.</td>
+            </tr>
+        <% } %>
+    </tbody>
+    </table>
+</div>

@@ -1,0 +1,62 @@
+<div class="container my-5">
+    <h1 class="pb-2 border-bottom">Sản phẩm</h1>
+
+    <div class="row mt-4">
+        <!-- Sidebar Danh mục -->
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="/san-pham" class="list-group-item list-group-item-action <%= selectedCategory === 'Tất cả' ? 'active' : '' %>">
+                    Tất cả sản phẩm
+                </a>
+                <% if (categories.length > 0) { %>
+                    <% categories.forEach(cat => { %>
+                        <a href="/san-pham?category=<%= cat.id %>" class="list-group-item list-group-item-action <%= Number(selectedCategory) === cat.id ? 'active' : '' %>">
+                            <%= cat.name %>
+                        </a>
+                    <% }) %>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Lưới sản phẩm -->
+        <div class="col-md-9">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                <% if (products.length > 0) { %>
+                    <% products.forEach(product => { 
+                        let firstImage = '/images/default-placeholder.png';
+                        try {
+                            const images = JSON.parse(product.images);
+                            if (images && images.length > 0) {
+                                firstImage = images[0];
+                            }
+                        } catch (e) {}
+                    %>
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <a href="/san-pham/<%= product.id %>">
+                                <img src="<%= firstImage %>" class="card-img-top" alt="<%= product.name %>" style="height: 225px; object-fit: cover;">
+                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><a href="/san-pham/<%= product.id %>" class="text-decoration-none"><%= product.name %></a></h5>
+                                <p class="card-text product-short-description"><%= product.description.substring(0, 70) %>...</p>
+                                <p class="card-text text-danger fw-bold">
+                                    <% if (isNaN(product.price)) { %>
+                                        <%= product.price %>
+                                    <% } else { %>
+                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price) %>
+                                    <% } %>
+                                </p>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <a href="/san-pham/<%= product.id %>" class="btn btn-sm btn-outline-secondary w-100">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="ms-3">Không có sản phẩm nào trong danh mục này.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>

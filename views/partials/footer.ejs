@@ -1,0 +1,76 @@
+  <footer class="site-footer mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 mb-4">
+          <h5 class="footer-heading">Về chúng tôi</h5>
+          <p class="footer-about-text"><%- settings.footer_about_us_text %></p>
+          <ul class="list-unstyled footer-links footer-contact-info">
+            <li class="mb-2">
+                <i class="bi bi-telephone me-2"></i><a href="tel:<%= settings.about_us_phone %>"><%= settings.about_us_phone %></a>
+            </li>
+            <li class="mb-2">
+                <i class="bi bi-envelope me-2"></i><a href="mailto:<%= settings.about_us_email %>"><%= settings.about_us_email %></a>
+            </li>
+            <li class="mb-2">
+                <i class="bi bi-geo-alt me-2"></i><span><%= settings.about_us_address %></span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <h5 class="footer-heading">Hỗ trợ khách hàng</h5>
+          <ul class="list-unstyled footer-links">
+            <li><a href="/huong-dan-mua-hang">Hướng dẫn mua hàng</a></li>
+            <li><a href="/chinh-sach/doi-tra">Chính sách đổi trả</a></li>
+            <li><a href="/chinh-sach/giao-hang">Chính sách giao hàng</a></li>
+            <li><a href="/chinh-sach/bao-mat">Chính sách bảo mật</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <h5 class="footer-heading">Chấp nhận thanh toán</h5>
+          <div class="footer-partners">
+            <% 
+            let paymentPartners = [];
+            if (settings.payment_partners) {
+                try { paymentPartners = JSON.parse(settings.payment_partners); } catch(e) {}
+            }
+            %>
+            <% if (paymentPartners.length > 0) { %>
+                <% paymentPartners.forEach(logoUrl => { %>
+                    <img src="<%= logoUrl %>" alt="Payment Partner">
+                <% }) %>
+            <% } %>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <h5 class="footer-heading">Đối tác vận chuyển</h5>
+          <div class="footer-partners">
+            <% 
+            let shippingPartners = [];
+            if (settings.shipping_partners) {
+                try { shippingPartners = JSON.parse(settings.shipping_partners); } catch(e) {}
+            }
+            %>
+            <% if (shippingPartners.length > 0) { %>
+                <% shippingPartners.forEach(logoUrl => { %>
+                    <img src="<%= logoUrl %>" alt="Shipping Partner">
+                <% }) %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center border-top pt-3">
+          <p class="copyright-text"><%- settings.footer_info %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Widget -->
+  <a href="<%= settings.chat_link %>" class="chat-widget" target="_blank" rel="noopener noreferrer">
+    <i class="bi bi-chat-dots-fill"></i>
+  </a>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

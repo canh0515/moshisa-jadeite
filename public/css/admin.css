@@ -1,0 +1,78 @@
+:root {
+    --admin-primary: #1A4341; /* Xanh ngọc tối */
+    --admin-accent: #c5a47e;  /* Vàng gold */
+    --admin-hover: #2a5452;   /* Xanh ngọc tối hơn một chút */
+}
+
+body {
+    font-family: 'Roboto', sans-serif; /* Giữ nguyên phông chữ cho admin */
+}
+
+#wrapper {
+    overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    background-color: var(--admin-primary);
+    transition: margin .25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+}
+
+#sidebar-wrapper .sidebar-heading a {
+    color: var(--admin-accent);
+    font-weight: bold;
+}
+
+#sidebar-wrapper .list-group {
+    width: 15rem;
+}
+
+#sidebar-wrapper .list-group-item {
+    background-color: var(--admin-primary);
+    color: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid var(--admin-hover);
+}
+
+#sidebar-wrapper .list-group-item:hover, #sidebar-wrapper .list-group-item.active {
+    background-color: var(--admin-hover);
+    color: #fff;
+}
+
+#page-content-wrapper {
+    min-width: 100vw;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+}
+
+@media (min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+    }
+}
+
+.logo-wrapper .btn-close {
+    background-color: #dc3545; /* Bootstrap's danger color */
+    border-radius: 50%;
+    padding: 0.35em;
+}
+
+.logo-wrapper .btn-close:hover {
+    background-color: #bb2d3b; /* Darker danger color */
+}

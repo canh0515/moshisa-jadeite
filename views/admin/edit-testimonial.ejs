@@ -1,0 +1,32 @@
+<%- include('../layouts/admin-header') %>
+
+<div class="container my-5">
+    <h1>Sửa Đánh giá</h1>
+    <hr>
+    <form action="/admin/testimonials/edit/<%= testimonial.id %>" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="name" class="form-label">Tên khách hàng</label>
+            <input type="text" class="form-control" id="name" name="name" value="<%= testimonial.name %>" required>
+        </div>
+        <div class="mb-3">
+            <label for="position" class="form-label">Chức vụ/Thông tin thêm</label>
+            <input type="text" class="form-control" id="position" name="position" value="<%= testimonial.position %>" placeholder="Ví dụ: Giám đốc công ty ABC">
+        </div>
+        <div class="mb-3">
+            <label for="avatar" class="form-label">Ảnh đại diện (Avatar)</label>
+            <p>Ảnh hiện tại:</p>
+            <img src="<%= testimonial.avatarUrl %>" alt="<%= testimonial.name %>" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-bottom: 10px;">
+            <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
+            <div class="form-text">Để trống nếu không muốn thay đổi ảnh đại diện.</div>
+        </div>
+        <div class="mb-3">
+            <label for="reviewText" class="form-label">Nội dung đánh giá</label>
+            <textarea class="form-control" id="reviewText" name="reviewText" rows="5" required><%= testimonial.reviewText %></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        <a href="/admin/testimonials" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+
+<%- include('../layouts/admin-footer') %>
