@@ -225,40 +225,9 @@ exports.postEditProduct = async (req, res) => {
 // Xử lý xóa sản phẩm
 exports.postDeleteProduct = async (req, res) => {
   const productId = req.params.id;
-  try {
-    const product = await Product.findByPk(productId);
-    if (!product) {
-      req.flash('error', 'Không tìm thấy sản phẩm để xóa.');
-      return res.redirect('/admin');
-    }
-
-    // Hàm trợ giúp để xóa file một cách an toàn
-    const deleteFile = async (filePath) => {
-      if (!filePath) return;
-      try {
-        // Chuyển đổi đường dẫn web (/uploads/file.jpg) thành đường dẫn hệ thống
-        const systemPath = path.join(__dirname, '..', 'public', filePath);
-        await fs.unlink(systemPath);
-      } catch (err) {
-        // Bỏ qua lỗi nếu file không tồn tại, nhưng ghi log các lỗi khác
-        if (err.code !== 'ENOENT') {
-          console.error(`Lỗi khi xóa file ${filePath}:`, err);
-        }
-      }
-    };
-
-    // Xóa tất cả các ảnh và video liên quan
-    const images = product.images ? JSON.parse(product.images) : [];
-    await Promise.all(images.map(deleteFile));
-
-    await product.destroy(); // Xóa sản phẩm khỏi database
-    req.flash('success', 'Đã xóa sản phẩm và các file liên quan thành công!');
-    res.redirect('/admin');
-  } catch (err) {
-    console.error('Lỗi khi xóa sản phẩm:', err);
-    req.flash('error', 'Đã xảy ra lỗi khi xóa sản phẩm.');
-    res.redirect('/admin');
-  }
+  await Product.destroy({ where: { id: productId } });
+  req.flash('success', 'Đã xóa sản phẩm thành công!');
+  res.redirect('/admin');
 };
 
 // Hiển thị trang cài đặt chung
@@ -491,8 +460,8 @@ exports.postEditTestimonial = async (req, res) => {
 
 // Xử lý xóa đánh giá
 exports.postDeleteTestimonial = async (req, res) => {
+  const id = req.params.id;
   try {
-    const { id } = req.body;
     await Testimonial.destroy({ where: { id: id } });
     res.redirect('/admin/testimonials');
   } catch (err) {

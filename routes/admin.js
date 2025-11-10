@@ -80,7 +80,7 @@ router.get('/testimonials/edit/:id', adminController.getEditTestimonialPage);
 router.post('/testimonials/edit/:id', upload.single('avatar'), adminController.postEditTestimonial);
 
 // POST /admin/testimonials/delete/:id
-router.post('/testimonials/delete', adminController.postDeleteTestimonial);
+router.post('/testimonials/delete/:id', adminController.postDeleteTestimonial);
 
 // --- Knowledge Routes ---
 
