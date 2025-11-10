@@ -30,13 +30,20 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    tinymce.init({
-      selector: 'textarea#content-editor',
-      plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+  $(document).ready(function() {
+    $('#content-editor').summernote({
+      placeholder: 'Nhập nội dung của bạn ở đây...',
+      tabsize: 2,
       height: 600,
-      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture', 'video']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ]
     });
   });
 </script>
