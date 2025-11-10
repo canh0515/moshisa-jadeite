@@ -746,6 +746,18 @@ exports.postEditCategory = async (req, res) => {
   }
 };
 
+// Xử lý xóa danh mục
+exports.postDeleteCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    await Category.destroy({ where: { id: categoryId } });
+    res.redirect('/admin/categories');
+  } catch (err) {
+    console.error('Lỗi khi xóa danh mục:', err);
+    res.status(500).send('Không thể xóa danh mục');
+  }
+};
+
 // --- Quản lý Video ---
 
 // Hiển thị trang quản lý video
