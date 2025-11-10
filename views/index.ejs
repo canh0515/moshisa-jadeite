@@ -18,8 +18,8 @@
     <div class="carousel-inner rounded">
         <% slides.forEach((slide, index) => { %>
             <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                <a href="<%= slide.link || '#' %>">
-                    <img src="<%= slide.imageUrl %>" class="d-block w-100" alt="<%= slide.title %>" style="max-height: 400px; object-fit: cover;">
+                <a href="<%= slide.link || '#' %>" class="d-flex h-100 w-100 align-items-center justify-content-center">
+                    <img src="<%= slide.imageUrl %>" class="d-block" alt="<%= slide.title %>">
                     <% if (slide.title) { %>
                         <div class="carousel-caption d-none d-md-block">
                             <h5><%= slide.title %></h5>

@@ -20,6 +20,23 @@
       --color-primary: <%= settings.color_primary %>;
       --color-accent: <%= settings.color_accent %>;
     }
+
+    /* Custom CSS for Carousel Slides */
+    .carousel-item {
+      height: 60vh; /* Cố định chiều cao của slide là 60% chiều cao màn hình */
+      background-color: #000000; /* Nền màu đen */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .carousel-item img {
+      /* Ghi đè mọi style khác để đảm bảo ảnh hiển thị trọn vẹn */
+      object-fit: contain !important; 
+      max-height: 100% !important;
+      max-width: 100% !important;
+      width: auto !important;
+      height: auto !important;
+    }
   </style>
 </head>
 <body>
