@@ -133,11 +133,11 @@ router.get('/categories/add', adminController.getAddCategoryPage);
 // POST /admin/categories/add
 router.post('/categories/add', adminController.postAddCategory);
 
-// GET /admin/categories/edit/:id
-router.get('/categories/edit/:id', adminController.getEditCategoryPage);
+// GET /admin/edit-category/:id
+router.get('/edit-category/:id', adminController.getEditCategoryPage);
 
-// POST /admin/categories/edit/:id
-router.post('/categories/edit/:id', adminController.postEditCategory);
+// POST /admin/edit-category/:id
+router.post('/edit-category/:id', adminController.postEditCategory);
 
 // --- Video Library Routes ---
 // GET /admin/videos
