@@ -303,6 +303,7 @@ exports.postUpdateSettings = async (req, res) => {
       { key: 'about_us_email', value: about_us_email },
       { key: 'color_primary', value: color_primary },
       { key: 'color_accent', value: color_accent },
+      { key: 'chat_link', value: chat_link },
     ];
 
     // Nếu có file logo mới được upload

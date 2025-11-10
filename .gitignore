@@ -5,6 +5,7 @@
 .env
 
 # Data and log files
+public/uploads
 database.sqlite
 *.sql
 *.log
