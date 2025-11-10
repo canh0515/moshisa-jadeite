@@ -52,8 +52,9 @@ app.use(loadSettings);
 const indexRoutes = require('./routes/index');
 const adminRoutes = require('./routes/admin');
 
-app.use('/', indexRoutes);
+// Khai báo route cho admin TRƯỚC route chung để tránh bị route động "/:slug" bắt mất.
 app.use('/admin', adminRoutes);
+app.use('/', indexRoutes);
 
 // Hàm khởi động server
 const startServer = async () => {

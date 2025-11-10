@@ -21,15 +21,12 @@ router.get('/kien-thuc/:slug', productController.getKnowledgeDetailPage);
 router.get('/ve-chung-toi', productController.getAboutUsPage);
 router.get('/lien-he', productController.getContactPage);
 
-// Định nghĩa lại từng route cho các trang tĩnh để đảm bảo tính ổn định
-router.get('/chinh-sach-bao-mat', (req, res) => { req.params.slug = 'chinh-sach-bao-mat'; productController.getStaticPage(req, res); });
-router.get('/chinh-sach-doi-tra', (req, res) => { req.params.slug = 'chinh-sach-doi-tra'; productController.getStaticPage(req, res); });
-router.get('/chinh-sach-giao-hang', (req, res) => { req.params.slug = 'chinh-sach-giao-hang'; productController.getStaticPage(req, res); });
-router.get('/huong-dan-mua-hang', (req, res) => { req.params.slug = 'huong-dan-mua-hang'; productController.getStaticPage(req, res); });
-
 // --- Article (Blog) Routes ---
 router.get('/bai-viet', productController.getArticleListPage);
 router.get('/bai-viet/:slug', productController.getArticleDetailPage);
 
+// Route động cho các trang tĩnh (phải đặt ở cuối)
+// Sẽ bắt các slug như /chinh-sach-bao-mat, /chinh-sach-doi-tra, v.v.
+router.get('/:slug', productController.getStaticPage);
 
 module.exports = router;

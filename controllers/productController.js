@@ -12,7 +12,7 @@ exports.getHomePage = async (req, res) => {
     // Lấy dữ liệu không phụ thuộc trước
     const [testimonials, slides] = await Promise.all([
       Testimonial.findAll({
-        order: [['createdAt', 'DESC']],
+        order: [['createdAt', 'DESC']], // Tải kèm sản phẩm liên quan
         limit: 4
       }),
       CarouselSlide.findAll({ order: [['order', 'ASC']] })

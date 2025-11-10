@@ -19,10 +19,17 @@
         <div class="col-lg-6 col-md-6 mb-6">
           <h5 class="footer-heading">Hỗ trợ khách hàng</h5>
           <ul class="list-unstyled footer-links">
-            <li><a href="/huong-dan-mua-hang">Hướng dẫn mua hàng</a></li>
-            <li><a href="/chinh-sach/doi-tra">Chính sách đổi trả</a></li>
-            <li><a href="/chinh-sach/giao-hang">Chính sách giao hàng</a></li>
-            <li><a href="/chinh-sach/bao-mat">Chính sách bảo mật</a></li>
+            <% 
+                const policyPages = [
+                  { slug: 'chinh-sach-bao-mat', title: 'Chính sách bảo mật' },
+                  { slug: 'chinh-sach-doi-tra', title: 'Chính sách đổi trả' },
+                  { slug: 'chinh-sach-giao-hang', title: 'Chính sách giao hàng' },
+                  { slug: 'huong-dan-mua-hang', title: 'Hướng dẫn mua hàng' }
+                ];
+              %>
+              <% policyPages.forEach(page => { %>
+                <li><a href="/<%= page.slug %>"><%= page.title %></a></li>
+              <% }) %>
           </ul>
         </div>
         <!-- <div class="col-lg-3 col-md-6 mb-4">

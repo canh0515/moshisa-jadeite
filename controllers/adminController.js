@@ -495,16 +495,17 @@ exports.postDeleteTestimonial = async (req, res) => {
   const id = req.params.id;
   try {
     const testimonial = await Testimonial.findByPk(id);
-    if (testimonial && testimonial.avatarUrl) {
-      try {
-        const systemPath = path.join(__dirname, '..', 'public', testimonial.avatarUrl);
-        await fs.unlink(systemPath);
-      } catch (err) {
-        if (err.code !== 'ENOENT') console.error(`Lỗi khi xóa file avatar ${testimonial.avatarUrl}:`, err);
+    if (testimonial) {
+      if (testimonial.avatarUrl) {
+        try {
+          const systemPath = path.join(__dirname, '..', 'public', testimonial.avatarUrl);
+          await fs.unlink(systemPath);
+        } catch (err) {
+          if (err.code !== 'ENOENT') console.error(`Lỗi khi xóa file avatar ${testimonial.avatarUrl}:`, err);
+        }
       }
+      await Testimonial.destroy({ where: { id: id } }); // Xóa bản ghi trong DB
     }
-
-    await Testimonial.destroy({ where: { id: id } }); // Xóa bản ghi trong DB
     res.redirect('/admin/testimonials');
   } catch (err) {
     console.error('Lỗi khi xóa đánh giá:', err);
