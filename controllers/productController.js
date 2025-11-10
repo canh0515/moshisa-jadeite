@@ -37,7 +37,7 @@ exports.getHomePage = async (req, res) => {
     }
 
     res.render('index', {
-      pageTitle: 'Trang sức Ngọc Việt Nam - Trang chủ',
+      pageTitle: 'Trang sức Moshisa Jadeite - Trang chủ',
       testimonials: testimonials,
       slides: slides,
       featuredCategories: featuredCategories
