@@ -93,6 +93,15 @@
                 sidebar.classList.toggle('w-20');
             });
         });
+
+        // Handle confirm delete forms
+        $(document).ready(function() {
+            $('.form-confirm-delete').on('submit', function(e) {
+                if (!confirm('Bạn có chắc chắn muốn thực hiện hành động xóa này?')) {
+                    e.preventDefault(); // Ngăn form được gửi đi nếu người dùng chọn "Cancel"
+                }
+            });
+        });
     </script>
 </body>
 </html>

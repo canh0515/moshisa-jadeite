@@ -32,7 +32,7 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <a href="/admin/categories/edit/<%= category.id %>" class="text-indigo-600 hover:text-indigo-900 mr-4">Sửa</a>
-                            <form action="/admin/categories/delete/<%= category.id %>" method="POST" class="inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này?');">
+                            <form action="/admin/categories/delete/<%= category.id %>" method="POST" class="inline-block form-confirm-delete">
                                 <button type="submit" class="text-red-600 hover:text-red-900">
                                     Xóa
                                 </button>

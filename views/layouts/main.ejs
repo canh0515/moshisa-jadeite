@@ -37,6 +37,14 @@
       width: auto !important;
       height: auto !important;
     }
+
+    /* Custom CSS for Site Logo */
+    .site-logo-img {
+      width: 90px;  /* Chiều rộng của logo */
+      height: 90px; /* Chiều cao của logo */
+      border-radius: 50%; /* Bo tròn để tạo thành hình tròn */
+      object-fit: cover;  /* Đảm bảo ảnh lấp đầy khung tròn mà không bị méo */
+    }
   </style>
 </head>
 <body>
@@ -55,7 +63,7 @@
         <div class="logo-container text-center mb-2">
           <a href="/" class="d-inline-flex align-items-center text-dark text-decoration-none site-logo">
             <% if (settings.logo_url && settings.logo_url !== '/images/default-logo.png') { %>
-              <img src="<%= settings.logo_url %>" alt="<%= settings.site_name %>">
+              <img src="<%= settings.logo_url %>" alt="<%= settings.site_name %>" class="site-logo-img">
             <% } %>
             <span class="fs-4 fw-bold ms-2"><%= settings.site_name %></span>
           </a>
